@@ -1,0 +1,18 @@
+#!/bin/bash
+
+javac rsa_keygen.java
+while getopts :p:s:n: option
+	do
+		case "$option" in
+		p)
+			public_keyfile="$OPTARG"
+			;;
+		s)
+			secret_keyfile="$OPTARG"
+			;;
+		n)	
+			numbits="$OPTARG"
+			;;
+			esac
+	done
+	java rsa_keygen -p $public_keyfile -s $secret_keyfile -n $numbits

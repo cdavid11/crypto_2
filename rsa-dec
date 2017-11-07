@@ -1,0 +1,17 @@
+#!/bin/bash
+
+javac rsa_dec.java
+while getopts :k:i:o: option
+	do
+		case "$option" in
+		k)
+			keyfile="$OPTARG"
+			;;
+		i)
+			infile="$OPTARG"
+			;;
+		o)	outfile="$OPTARG"
+			;;
+			esac
+	done
+	java rsa_dec -k $keyfile -i $infile -o $outfile
