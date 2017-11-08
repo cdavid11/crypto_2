@@ -22,6 +22,7 @@ public class rsa_enc {
 		/* This converts a Big Integer to a string */
 		String output_data = new String(encrypted_rsa.toString());
 		
+		rsa_funcs.output_file(args, output_data);
 		
 	}
 	
