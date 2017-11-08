@@ -23,7 +23,7 @@ public class rsa_keygen {
 			System.exit(0);	
 		}
 		
-		//set cmd line args
+		//set cmd line args 
 		num_bits = Integer.parseInt(args[5]); //convert string to int
 		public_keyfile = args[1];
 		private_keyfile = args[3];
