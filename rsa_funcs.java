@@ -6,7 +6,7 @@ import javax.crypto.spec.*;
 import java.security.*;
 import java.io.*;
 import java.math.*;
-import java.util.Scanner;
+import java.util.*;
 
 public class rsa_funcs
 {
@@ -178,54 +178,110 @@ public class rsa_funcs
 	}
 	
 	
-	public static BigInteger encrypt_data(BigInteger[] key_data, BigInteger input_data)
+	public static BigInteger encrypt_data(BigInteger[] key_data, BigInteger message)
 	{
-		BigInteger enc_data = BigInteger.ONE;
 		BigInteger rsa_number_of_bits = key_data[0];
 		BigInteger rsa_N = key_data[1];
 		BigInteger rsa_e = key_data[2];
+		
+		byte[] zero_byte = new byte[1];
+		byte[] two_byte = new byte[1];
 		byte[] random_bytes = create_random_bytes(rsa_number_of_bits);
+		byte[] message_bytes = message.toByteArray();
+		byte[] appended_bytes = null;
+		BigInteger cipher_text;
 		
-		/* Converts a BigInteger to a byte array */
-		byte[] input_data_bytes = input_data.toByteArray();
+		zero_byte[0] = (byte)0;
+		two_byte[0] = (byte)2;
 
-
-		
 		/*
 		formula for encryption:
 			( 0x00 || 0x02 || r || 0x00 || m )^e mod N
 		*/
 		
-		return enc_data;
+		//This makes the ( 0x00 || 0x02 || r || 0x00 || m ) for encypting the message
+		appended_bytes = append_byte_arrays(zero_byte, two_byte);
+		appended_bytes = append_byte_arrays(appended_bytes, random_bytes);
+		appended_bytes = append_byte_arrays(appended_bytes, zero_byte);
+		appended_bytes = append_byte_arrays(appended_bytes, message_bytes);
+		
+		BigInteger int_msg = new BigInteger(appended_bytes);
+		
+		//This does ( int_msg )^e mod N 
+	    cipher_text = int_msg.modPow(rsa_e, rsa_N);
+		
+		
+		return cipher_text;
 		
 	}
 	
 	public static byte[] create_random_bytes(BigInteger num_bits)
 	{
-		//TODO: Do we need to check for multiples of 8 or something?
-		int num_bytes = num_bits.intValue()/8;
+		byte[] random_bytes = null;
+
 		
-		byte[] random_bytes = new byte[num_bytes];
-				
-		SecureRandom random = new SecureRandom();
+		boolean loop = true;
 		
-		random.nextBytes(random_bytes);
+		while(loop)
+		{
+			SecureRandom random = new SecureRandom();
+
+			BigInteger random_int = new BigInteger(num_bits.intValue(), random);
 		
+			random_bytes = random_int.toByteArray();
+			
+			loop = check_bytes_for_zero(random_bytes);
+			
+		}
 		return random_bytes;
 	}
 	
+	/*
+	 * Makes sure there is no 0 byte in a byte array
+	 */
+	public static boolean check_bytes_for_zero(byte[] byte_array)
+	{
+		int i = 0;
+		int array_size = byte_array.length;
+		
+		for(i = 0; i < array_size; i++ )
+		{
+			if( byte_array[i] == (byte)0 )
+			{
+				//there is a 0 in the array
+				return true;
+			}
+		}
+		
+		//there was no 0 in the array
+		return false;
+	}
+
 	
 	
+	/*
+	 * Appends IV to cipher text message
+	 */
+	public static byte[] append_byte_arrays(byte[] original, byte[] data_to_add)
+	{
+	    byte[] result = new byte[original.length + data_to_add.length]; 
+	    System.arraycopy(original, 0, result, 0, original.length); 
+	    System.arraycopy(data_to_add, 0, result, original.length, data_to_add.length); 
+	    return result;
+	} 
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/* Just to print out the byte array
+	 */
+	public static void TestPrinting( byte[] data )
+	{
+		for(byte b:data)
+		{
+	        //
+	        System.out.print(b);
+	        System.out.print(" ");
+	     }
+
+		System.out.println();
+	}	
 }
