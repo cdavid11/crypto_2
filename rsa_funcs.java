@@ -218,45 +218,58 @@ public class rsa_funcs
 	public static byte[] create_random_bytes(BigInteger num_bits)
 	{
 		byte[] random_bytes = null;
+		
+		SecureRandom random = new SecureRandom();
 
-		
-		boolean loop = true;
-		
-		while(loop)
-		{
-			SecureRandom random = new SecureRandom();
-
-			BigInteger random_int = new BigInteger(num_bits.intValue(), random);
-		
-			random_bytes = random_int.toByteArray();
-			
-			loop = check_bytes_for_zero(random_bytes);
-			
-		}
+		int r_bits = num_bits.intValue() / 2;
+				
+		BigInteger random_int = new BigInteger(r_bits, random);
+	
+		random_bytes = random_int.toByteArray();
+					
+		random_bytes = no_zero_bytes_array(random_bytes);
+					
 		return random_bytes;
 	}
 	
 	/*
 	 * Makes sure there is no 0 byte in a byte array
 	 */
-	public static boolean check_bytes_for_zero(byte[] byte_array)
+	public static byte[] no_zero_bytes_array(byte[] byte_array)
 	{
 		int i = 0;
 		int array_size = byte_array.length;
 		
 		for(i = 0; i < array_size; i++ )
 		{
+			//there is a 0 in the array
 			if( byte_array[i] == (byte)0 )
 			{
-				//there is a 0 in the array
-				return true;
+				byte_array[i] = make_non_zero_byte();
 			}
 		}
 		
 		//there was no 0 in the array
-		return false;
+		return byte_array;
 	}
 
+	public static byte make_non_zero_byte()
+	{
+		byte non_zero_byte;
+		
+		byte[] random_byte = new byte[1];
+		
+		random_byte[0] = (byte)0;
+		
+		while(random_byte[0] == (byte)0 ) 
+		{
+			new Random().nextBytes(random_byte);
+		}
+		
+		non_zero_byte = random_byte[0];
+		
+		return non_zero_byte;
+	}
 	
 	
 	/*
