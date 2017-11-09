@@ -190,7 +190,8 @@ public class rsa_funcs
 		byte[] message_bytes = message.toByteArray();
 		byte[] appended_bytes = null;
 		BigInteger cipher_text;
-		
+			
+
 		zero_byte[0] = (byte)0;
 		two_byte[0] = (byte)2;
 
@@ -206,10 +207,9 @@ public class rsa_funcs
 		appended_bytes = append_byte_arrays(appended_bytes, message_bytes);
 		
 		BigInteger int_msg = new BigInteger(appended_bytes);
-		
+
 		//This does ( int_msg )^e mod N 
-	    cipher_text = int_msg.modPow(rsa_e, rsa_N);
-		
+	  cipher_text = int_msg.modPow(rsa_e, rsa_N);
 		
 		return cipher_text;
 		
