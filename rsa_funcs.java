@@ -207,7 +207,7 @@ public class rsa_funcs
 		appended_bytes = append_byte_arrays(appended_bytes, message_bytes);
 		
 		BigInteger int_msg = new BigInteger(appended_bytes);
-
+		System.out.println("Orig Msg: " + int_msg);
 		//This does ( int_msg )^e mod N 
 	  cipher_text = int_msg.modPow(rsa_e, rsa_N);
 		
@@ -297,4 +297,31 @@ public class rsa_funcs
 
 		System.out.println();
 	}	
+
+
+/*Here lies the modular exponentation function for extra credit. Recursive solution.*/
+public static BigInteger modex (BigInteger num, BigInteger exp, BigInteger mod){
+
+	BigInteger z;
+
+	/*If we reduced the exponent all the way down to zero then just return 1!!!*/
+	if (exp.equals(BigInteger.ZERO)) return BigInteger.ONE;
+
+	/*If the number is odd, then subtract one from the exponent and recursively call function
+		return that value (z*num) mod N*/
+	else if (exp.mod(new BigInteger("2")).equals(BigInteger.ONE)){
+			
+		z = modex(num, exp.subtract(BigInteger.ONE), mod);
+		return (z.multiply(num).mod(mod));
+
+	}else{
+		
+		/*Otherwise divide the exponent by two and call the function again. Return (z^2) mod N*/
+		z = modex(num, exp.divide(new BigInteger("2")), mod);
+		return (z.multiply(z).mod(mod));
+
+	}
+
+}
+
 }

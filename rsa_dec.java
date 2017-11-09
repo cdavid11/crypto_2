@@ -27,7 +27,8 @@ public class rsa_dec{
 
 
 		/*Take the ciphertext and raise it by (c^d) mod N or put another way: ((m^e)^d) mod N*/
-		original_msg = this.ciphertext.modPow(key[2],key[1]);
+		original_msg = rsa_funcs.modex(this.ciphertext,key[2],key[1]);
+		System.out.println("Orig Msg: " + original_msg);
 		original_bytes = original_msg.toByteArray();
 		
 		/*Go through the cipher text until we find the 0x00 byte*/	
@@ -57,6 +58,7 @@ public class rsa_dec{
 		input = rsa_funcs.input_file(args);
 		ciphertext = new BigInteger(input);
 		
+		System.out.println("CipherText: " + ciphertext);	
 		/*Call the RSA Decrypt constructor with key information and the ciphertext*/
 		R = new rsa_dec(key_data, ciphertext);
 
