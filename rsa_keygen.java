@@ -31,6 +31,15 @@ public class rsa_keygen {
 		//A. 2 large prime numbers, use a different seed for each
 		p = BigInteger.probablePrime(num_bits/2, new SecureRandom());
 		q = BigInteger.probablePrime(num_bits/2, new SecureRandom());
+		
+
+		/*These functions work. They're my prime # generator. The issue. They are slower
+			than I had hoped but they spit out primes. See rsa_funcs for details 
+			all the way at the bottom.*/
+		
+		//p = rsa_funcs.probably_prime(num_bits/2, new SecureRandom());
+		//q = rsa_funcs.probably_prime(num_bits/2, new SecureRandom());
+		
 
 		//B. Compute N , is private: p*q
 		N = p.multiply(q);

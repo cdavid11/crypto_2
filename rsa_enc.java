@@ -26,14 +26,4 @@ public class rsa_enc {
 	}
 	
 	
-	/* test printing stuff
-	System.out.println(input_data);
-	System.out.println(rsa_public_key);
-	System.out.println(rsa_number_of_bits);
-	System.out.println(rsa_N);
-	System.out.println(rsa_e);
-	*/
-	
-	
-	
 }

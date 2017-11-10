@@ -361,7 +361,7 @@ public static BigInteger modex (BigInteger num, BigInteger exp, BigInteger mod){
 			
 			/*Generate a random value x between 1 and (n -1)*/
 			do{
-				randx = new BigInteger(to_test.bitLength() - 1, sr);
+				randx = new BigInteger(to_test.bitLength(), sr);
 			}while (randx.compareTo(to_test) > 0);	
 			
 			/*Go through the x's until we find one where x^(2^i)*t congruent to 1 mod n*/
@@ -371,19 +371,20 @@ public static BigInteger modex (BigInteger num, BigInteger exp, BigInteger mod){
 			for (int i = 1; i <= s.intValue(); i++){
 				
 				current = modex(randx, two.pow(i).multiply(t), to_test);
-				if (current.equals(BigInteger.ONE) && (prev.equals(BigInteger.ONE) || prev.equals(to_test.subtract(BigInteger.ONE)))){
+				if (current.equals(BigInteger.ONE)){
+				
+					if (prev.equals(BigInteger.ONE) || prev.equals(to_test.subtract(BigInteger.ONE))){
 
 					found_prime = true;
 					break;
 
-				}
+					}else break;
 
+				}
 			}
 
 		}
 		
-		for (int i = 0; i < to_test_bytes.length; i++) System.out.println("Byte " + i + ": " + to_test_bytes[i]);	
-		//System.out.println("Is Prime? : " + to_test.isProbablePrime());	
 		return to_test;
 	}
 }
