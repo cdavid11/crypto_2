@@ -23,14 +23,14 @@ public class rsa_keygen {
 			System.exit(0);	
 		}
 		
-		//set cmd line args
+		//set cmd line args 
 		num_bits = Integer.parseInt(args[5]); //convert string to int
 		public_keyfile = args[1];
 		private_keyfile = args[3];
 		
 		//A. 2 large prime numbers, use a different seed for each
-		p = BigInteger.probablePrime(num_bits, new SecureRandom());
-		q = BigInteger.probablePrime(num_bits, new SecureRandom());
+		p = BigInteger.probablePrime(num_bits/2, new SecureRandom());
+		q = BigInteger.probablePrime(num_bits/2, new SecureRandom());
 
 		//B. Compute N , is private: p*q
 		N = p.multiply(q);
@@ -45,29 +45,11 @@ public class rsa_keygen {
 
 	    //E. compute multiplicative inverse e mod the order of the group
 	    d = e.modInverse(order);
-	    
-	    //TEST PRINTING
-	    //System.out.println("public key: " + "(" + N + " , " + e + ")");
-	    //System.out.println("private key: " + "(" + N + " , " + d + ")");
-	    
+	      
 	    //write public key: (N,e). private key: (N,d) to files
 	    rsa_keygen.write_keys_file(public_keyfile, args[5], N, e);
 	    rsa_keygen.write_keys_file(private_keyfile, args[5], N, d);
-	    
-	    //--------------test encrypt and decrypt, without padding.. (not sure what r is from notes)
-	    BigInteger cipher;
-	    BigInteger msg = new BigInteger("6");
-	    BigInteger decryptedMsg;
-	    
-	    //encrypt
-	    System.out.println("msg: " + msg);
-	    cipher = msg.modPow(e, N);
-	    System.out.println("ciphertext: " + cipher);
-	    
-	    //decrypt
-	    decryptedMsg = cipher.modPow(d, N);
-	    System.out.println("decryptedMsg " + decryptedMsg);
-	    //---------------------------------------------------------
+	
 	}
 	
 	/* coprime_val:
