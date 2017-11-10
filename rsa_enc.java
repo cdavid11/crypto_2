@@ -16,12 +16,11 @@ public class rsa_enc {
 		/* This converts a String to a Big Integer*/
 		BigInteger rsa_public_key = new BigInteger(input_data);
 		
-		
+			
 		encrypted_rsa = rsa_funcs.encrypt_data(key_data, rsa_public_key);
 				
 		/* This converts a Big Integer to a string */
 		String output_data = new String(encrypted_rsa.toString());
-		
 		rsa_funcs.output_file(args, output_data);
 		
 	}

@@ -207,9 +207,8 @@ public class rsa_funcs
 		appended_bytes = append_byte_arrays(appended_bytes, message_bytes);
 		
 		BigInteger int_msg = new BigInteger(appended_bytes);
-		System.out.println("Orig Msg: " + int_msg);
 		//This does ( int_msg )^e mod N 
-	  cipher_text = int_msg.modPow(rsa_e, rsa_N);
+	  cipher_text = modex(int_msg, rsa_e, rsa_N);
 		
 		return cipher_text;
 		
@@ -324,4 +323,56 @@ public static BigInteger modex (BigInteger num, BigInteger exp, BigInteger mod){
 
 }
 
+
+	public static BigInteger probably_prime(int num_bits, SecureRandom sr){
+
+		byte[] to_test_bytes = new byte[num_bits/8];
+		BigInteger to_test = BigInteger.ZERO;
+		BigInteger two = new BigInteger("2");
+		BigInteger s = BigInteger.ZERO;
+		BigInteger t;
+		BigInteger randx = BigInteger.ZERO;
+		BigInteger prev, current;
+		boolean found_prime = false;
+
+		while (found_prime == false){
+			
+			sr.nextBytes(to_test_bytes);
+			to_test = new BigInteger(to_test_bytes);
+			to_test = to_test.abs();
+
+			if ((to_test.compareTo(two) == -1 || to_test.mod(two).equals(BigInteger.ZERO))) continue;
+
+			t = to_test.subtract(BigInteger.ONE);
+	
+			while(t.mod(two).equals(BigInteger.ZERO)){
+
+				s = s.add(BigInteger.ONE);
+				t = t.divide(two);
+
+			}
+			
+			do{
+				randx = new BigInteger(to_test.bitLength() - 1, sr);
+			}while (randx.compareTo(to_test) > 0);	
+			
+			prev = modex(randx, t, to_test);
+			for (int i = 1; i <= s.intValue(); i++){
+				
+				current = modex(randx, two.pow(i).multiply(t), to_test);
+				if (current.equals(BigInteger.ONE) && (prev.equals(BigInteger.ONE) || prev.equals(to_test.subtract(BigInteger.ONE)))){
+
+					found_prime = true;
+					break;
+
+				}
+
+			}
+
+		}
+		
+		for (int i = 0; i < to_test_bytes.length; i++) System.out.println("Byte " + i + ": " + to_test_bytes[i]);	
+		//System.out.println("Is Prime? : " + to_test.isProbablePrime());	
+		return to_test;
+	}
 }
