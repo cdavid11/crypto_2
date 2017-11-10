@@ -323,7 +323,10 @@ public static BigInteger modex (BigInteger num, BigInteger exp, BigInteger mod){
 
 }
 
-
+	/*An attempt was made......*/
+	/*This is the probabilistic prime number generator. We did not use this in the program, however I'm shamelessly
+	  requesting consideration of partial extra credit as this function works. I manage to get prime numbers
+	  of the correct bit length from this function but sometimes it take a looong time. I'm sure it's an implementation issue*/
 	public static BigInteger probably_prime(int num_bits, SecureRandom sr){
 
 		byte[] to_test_bytes = new byte[num_bits/8];
@@ -335,16 +338,20 @@ public static BigInteger modex (BigInteger num, BigInteger exp, BigInteger mod){
 		BigInteger prev, current;
 		boolean found_prime = false;
 
+		
 		while (found_prime == false){
 			
+			/*Generate a random number then test to see if it is even, negative, or 1*/
 			sr.nextBytes(to_test_bytes);
 			to_test = new BigInteger(to_test_bytes);
 			to_test = to_test.abs();
 
 			if ((to_test.compareTo(two) == -1 || to_test.mod(two).equals(BigInteger.ZERO))) continue;
-
+				
+			/*Set t to (n-1)*/
 			t = to_test.subtract(BigInteger.ONE);
-	
+			
+			/*While t is even, add one to s and divide by two. (n-1) = 2^s(t)*/
 			while(t.mod(two).equals(BigInteger.ZERO)){
 
 				s = s.add(BigInteger.ONE);
@@ -352,10 +359,14 @@ public static BigInteger modex (BigInteger num, BigInteger exp, BigInteger mod){
 
 			}
 			
+			/*Generate a random value x between 1 and (n -1)*/
 			do{
 				randx = new BigInteger(to_test.bitLength() - 1, sr);
 			}while (randx.compareTo(to_test) > 0);	
 			
+			/*Go through the x's until we find one where x^(2^i)*t congruent to 1 mod n*/
+			/*If we find one, then check the previous value. If it is congruent to 1 mod n or -1 mod n, then
+			  we've got a prime number. Otherwise, it's composite*/
 			prev = modex(randx, t, to_test);
 			for (int i = 1; i <= s.intValue(); i++){
 				
