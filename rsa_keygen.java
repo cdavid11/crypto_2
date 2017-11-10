@@ -45,29 +45,11 @@ public class rsa_keygen {
 
 	    //E. compute multiplicative inverse e mod the order of the group
 	    d = e.modInverse(order);
-	    
-	    //TEST PRINTING
-	    //System.out.println("public key: " + "(" + N + " , " + e + ")");
-	    //System.out.println("private key: " + "(" + N + " , " + d + ")");
-	    
+	      
 	    //write public key: (N,e). private key: (N,d) to files
 	    rsa_keygen.write_keys_file(public_keyfile, args[5], N, e);
 	    rsa_keygen.write_keys_file(private_keyfile, args[5], N, d);
-	    
-	    //--------------test encrypt and decrypt, without padding.. (not sure what r is from notes)
-	    BigInteger cipher;
-	    BigInteger msg = new BigInteger("6");
-	    BigInteger decryptedMsg;
-	    
-	    //encrypt
-	    System.out.println("msg: " + msg);
-	    cipher = msg.modPow(e, N);
-	    System.out.println("ciphertext: " + cipher);
-	    
-	    //decrypt
-	    decryptedMsg = cipher.modPow(d, N);
-	    System.out.println("decryptedMsg " + decryptedMsg);
-	    //---------------------------------------------------------
+	
 	}
 	
 	/* coprime_val:
