@@ -189,7 +189,6 @@ public class rsa_funcs
 		byte[] random_bytes = create_random_bytes(rsa_number_of_bits);
 		byte[] message_bytes = message.toByteArray();
 		byte[] appended_bytes = null;
-		BigInteger cipher_text;
 			
 
 		zero_byte[0] = (byte)0;
@@ -208,9 +207,10 @@ public class rsa_funcs
 		
 		BigInteger int_msg = new BigInteger(appended_bytes);
 		//This does ( int_msg )^e mod N 
-	  cipher_text = modex(int_msg, rsa_e, rsa_N);
+		//cipher_text = modex(int_msg, rsa_e, rsa_N);
+		int_msg.modPow(rsa_e, rsa_N);
 		
-		return cipher_text;
+		return int_msg;
 		
 	}
 	
@@ -298,7 +298,8 @@ public class rsa_funcs
 	}	
 
 
-/*Here lies the modular exponentation function for extra credit. Recursive solution.*/
+/*Here lies the modular exponentation function for extra credit. Recursive solution.
+ * This worked on larger N values, but for some reason not on 256.*/
 public static BigInteger modex (BigInteger num, BigInteger exp, BigInteger mod){
 
 	BigInteger z;

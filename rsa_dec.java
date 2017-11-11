@@ -27,7 +27,11 @@ public class rsa_dec{
 
 
 		/*Take the ciphertext and raise it by (c^d) mod N or put another way: ((m^e)^d) mod N*/
-		original_msg = rsa_funcs.modex(this.ciphertext,key[2],key[1]);
+		//original_msg = rsa_funcs.modex(this.ciphertext,key[2],key[1]);
+		original_msg = this.ciphertext;
+		
+		original_msg.modPow(key[2], key[1]);
+		
 		original_bytes = original_msg.toByteArray();
 		
 		/*Go through the cipher text until we find the 0x00 byte*/	
